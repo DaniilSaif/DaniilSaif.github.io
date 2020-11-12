@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Who?</title>
+	<style>
+		body{
+			background-color: #2eb7ed;
+			color:#fbdb65;
+			text-shadow: 2px 1px #bc1339;
+		}
+		#sbm{
+  			display: none;
+		}
+	</style>
+</head>
+<body  >
+<script type="text/javascript">
+	function check (id,sbm) {
+	    if (document.getElementById(id).value == 'Менака' || document.getElementById(id).value == 'менака')
+	     document.getElementById(sbm).style.display = "block";
+
+	    
+	};
+
+ 
+
+</script>
+	<h1>#2 Ты уверен, что все правда?</h1>
+	<h2>Куда отправимся?</h2>
+
+	<form>
+		<input type="text" id="pole">
+		<input type="button" style="padding:5px 30px; " onclick="check('pole','sbm');">
+
+	</form>
+	<br>
+	<div  id='sbm'>
+		<img width=350px height=350px src="qr (1).svg" alt="">
+		</div>
+</body>
+</html>
