@@ -18,7 +18,7 @@
 
 <body>
 <!-- Создаём форму и указываем её обработчик и метод -->
-<form action="mail.php" method="post">
+<form action="https://daniilsaif.github.io/mail/mail.php" method="post">
 
     Ваше имя <input type="text" name="first_name"><br>
     Email: <input type="text" name="email" required placeholder="Обязательное поле"><br>
