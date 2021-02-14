@@ -1,0 +1,63 @@
+body {
+    margin: 10;
+    font-family: Verdana, Arial, sans-serif;
+    background-color: #FFCF73;
+    position: absolute;
+
+  }
+
+#app{
+  margin: 20px 15px;
+}
+
+h1{
+  color: #A66D00;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.knop{
+  display: inline;
+  color: #fff; /* цвет текста */
+  text-decoration: none; /* убирать подчёркивание у ссылок */
+  user-select: none; /* убирать выделение текста */
+  background: #d49318; /* фон кнопки */
+  padding: .4em 1.5em; /* отступ от текста */
+  outline: none; /* убирать контур в Mozilla */
+}
+
+p{
+  position: relative;
+  color: #B90091;
+  font-size: 35px;
+  text-transform: uppercase;
+  font-family: 'Ranchers', cursive;
+  font-weight: 800px;
+  display: inline-block;
+  top: 230px;
+  left: -10px;
+  transform: rotate(15deg);
+  z-index: 1;
+  background-color: #E969A8;
+}
+
+.box{
+  width: 200px;
+  height: 300px;
+  border: 2px solid #B90091;
+  box-shadow: 0 0 15px #B90091; 
+  border-radius: 10px;
+  z-index: 0;
+  position: absolute;
+
+}
+
+img{
+  border-radius: 10px;
+}
+
+input[type=text] {
+  background-color: #f5af47;
+  color: white;
+  font-size: 24px;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>My love</title>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <div id='app'>
+    <input type="text" v-model="mes">
+    <a href='#' class="knop"  v-on:click="isTrue">Проверить</a>
+    <h1>Назови мне твой ответ</h1>
+      <template  v-if="robin">
+        <div class='box'>
+          <img witdh="100px" height="300px" src="rob.jpg" alt="">
+        </div>
+        <p>{{answer}}</p>
+      </template>
+  
+    
+
+  </div>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+        mes: "",
+        answer:'ЗАБЕРИ   МЕНЯ',
+        robin:false
+    },
+    methods:{
+    isTrue: function(){
+        if(this.mes==='599978112'){
+            this.robin = true;
+            this.mes = "Я люблю тебя"
+            }
+        }
+    }
+})
+</script>
+</body>
+</html>
