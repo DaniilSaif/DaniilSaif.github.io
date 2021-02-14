@@ -42,8 +42,8 @@ p{
 }
 
 .box{
-  width: 200px;
-  height: 300px;
+  width: 400px;
+  height: 500px;
   border: 2px solid #B90091;
   box-shadow: 0 0 15px #B90091; 
   border-radius: 10px;
