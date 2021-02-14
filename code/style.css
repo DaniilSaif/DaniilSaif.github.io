@@ -29,11 +29,11 @@ h1{
 p{
   position: relative;
   color: #B90091;
-  font-size: 55px;
+  font-size: 65px;
   text-transform: uppercase;
   font-family: 'Ranchers', cursive;
   display: inline-block;
-  top: 380px;
+  top: 450px;
   left: -10px;
   transform: rotate(15deg);
   z-index: 1;
@@ -41,8 +41,8 @@ p{
 }
 
 .box{
-  width: 334px;
-  height: 500px;
+  width: 400px;
+  height: 600px;
   border: 2px solid #B90091;
   box-shadow: 0 0 15px #B90091; 
   border-radius: 10px;
@@ -53,6 +53,8 @@ p{
 
 img{
   border-radius: 10px;
+  width: 400px;
+  height: 600px;
 }
 
 input[type=text] {
