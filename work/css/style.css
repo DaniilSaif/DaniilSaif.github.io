@@ -14,6 +14,10 @@ body{
 	color: #000000;
 }
 
+.map{
+	margin: 50px;
+}
+
 img{
 	max-width: 100%;
 }
