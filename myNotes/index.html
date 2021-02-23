@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>WorkTask</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <div class="container" >
+            <div class="card ">
+                <h2>{{title}}</h2>                                 
+
+                <div v-if="!isTrue" class="form-control">
+
+                        <input type="text" :placeholder="placeText" @keyup.enter="addItem" ref="myInput"
+                        >            
+                    </div>
+                    <div v-else class="form-control">
+
+                        <input type="text" :placeholder="placeText" ref="myInput"
+                        >            
+                    </div>
+
+                    <div v-if="!isTrue" class="btn" @click="addItem">Добавить</div>
+                    <div v-else >
+                        <div class="btn redack" @click="redNewItem">Изменить</div>
+                        <div class="btn primary" @click="noRedNewItem">Отменить</div>
+                    </div>
+                    <hr>
+                    <div v-if="items.length !== 0">
+                        <ul class="list">
+                            <li class="list-item" v-for="(item,i) in items">
+                                
+                                <div>
+                                    <span>{{i+1}}. {{item}}</span> 
+                                </div>
+
+                            <div>
+                                    <div class="btn redack" @click="redItem(i)">
+                                    Ред.
+                                    </div>
+                                    <div class="btn danger" @click="delItem(i), isTrue=false">X</div>
+                            </div>                            
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>
+                        <span>{{createNote}}</span>
+                    </div>  
+                    <hr>
+                    <span>Общее количество заметок: {{items.length}}</span>
+            </div>
+        </div>
+
+
+    </div>  
+
+ 
+    <script>
+        Vue.createApp({
+            data: () => ({
+                placeText: "Введите новую заметку",
+                title: "Мои заметки",
+                user:'',
+                inputText: '',
+                newInputText: '',
+                items:[],
+                isTrue: false,
+                returnF: 0,
+                isDel: false,
+                createNote : "Создайте первую заметку",
+                notes: "Всего заметок - ",
+            }),
+            methods: {
+                addItem(){
+                    if(this.$refs.myInput.value !== ""){
+                    this.items.push(this.$refs.myInput.value);
+                    this.$refs.myInput.value = '';
+                    this.saveNotes();
+                }
+                },
+                delItem(i){
+                    this.items.splice(i,1);
+                    this.isDel = false;
+                    this.placeText = "Введите новую заметку";
+                    this.saveNotes();
+                },
+
+                redItem(i){
+                    this.placeText = "Вы изменяете " + ++i + " заметку!";
+                    this.isTrue = true;
+                    this.returnF = --i;
+                    this.saveNotes();
+                },
+                redNewItem(){
+                    if(this.$refs.myInput.value !== ""){
+                        this.items[this.returnF] = this.$refs.myInput.value;
+                        this.$refs.myInput.value = '';
+                        this.isTrue = false;
+                        this.placeText = "Введите новую заметку";
+                        this.saveNotes();
+                    }
+                },
+                noRedNewItem(){
+                    this.placeText = "Введите новую заметку";   
+                    this.isTrue = false;
+                },
+                saveNotes() {
+                    const parsed = JSON.stringify(this.items);
+                    localStorage.setItem('items', parsed);
+                }
+            },
+            mounted() {
+            if (localStorage.getItem('items')) {
+                try {
+                    this.items = JSON.parse(localStorage.getItem('items'));
+                } catch(e) {
+                    localStorage.removeItem('items');
+                }
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
