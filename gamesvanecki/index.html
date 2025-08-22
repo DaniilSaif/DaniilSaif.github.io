@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Игры ванецки</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0;
+      height:100vh;
+      background:#000;
+      color:#00ff66;
+      font-family:'Orbitron',sans-serif;
+      overflow:hidden;
+    }
+
+    /* --- Общие эффекты --- */
+    .star {
+      position:absolute; border-radius:50%;
+      background:#00ff66; opacity:0.8;
+      animation: twinkle 2s infinite alternate;
+    }
+    @keyframes twinkle {
+      from {opacity:0.2; transform:scale(0.8);}
+      to   {opacity:1; transform:scale(1.2);}
+    }
+
+    .eye {
+      position:absolute;
+      font-size:clamp(1.5rem,3vw,3em);
+      color:#00ff66;
+      opacity:0;
+      text-shadow:0 0 20px #00ffaa;
+      animation: eyeBlink 15s infinite;
+    }
+    @keyframes eyeBlink {0%,97%,100%{opacity:0;}98%{opacity:1;}99%{opacity:.5;} }
+
+    /* DVD логотип */
+    #dvd-logo {
+      position:absolute;
+      width: clamp(8px,12vw,100px);
+      filter: drop-shadow(0 0 15px #00ff66);
+      z-index:10;
+    }
+    .trail {
+      position:absolute;
+      width:20px; height:20px;
+      border-radius:50%;
+      background:#00ff66;
+      opacity:0.3;
+      pointer-events:none;
+      animation: fadeTrail 0.6s forwards;
+    }
+    @keyframes fadeTrail {
+      from {opacity:.5; transform:scale(1);}
+      to   {opacity:0; transform:scale(0);}
+    }
+
+    /* Центр */
+    .center {
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      z-index:5;
+      width:90%;
+    }
+    h1 {
+      font-size:clamp(1.4rem,4vw,2.5rem);
+      margin:0.5em;
+      color:#ccffee;
+      text-shadow:0 0 20px #00ff66,0 0 35px #00ffaa;
+      animation: glitch 3s infinite;
+      position:relative;
+    }
+    @keyframes glitch {
+      0%,90%,100% {text-shadow:0 0 20px #00ff66,0 0 35px #00ffaa; left:0;}
+      92% {left:-2px;}
+      94% {left:2px;}
+    }
+
+    #timer {
+      font-size:clamp(1rem,3vw,2.2rem);
+      padding:0.6em 1.2em;
+      border:2px solid #00ff66;
+      border-radius:15px;
+      background:rgba(0,40,0,0.7);
+      box-shadow:0 0 20px #00ff66;
+      animation:pulse 2s infinite alternate;
+      position:relative;
+      overflow:hidden;
+    }
+    @keyframes pulse {
+      0%{box-shadow:0 0 15px #00ff66;}
+      100%{box-shadow:0 0 40px #00ffaa;}
+    }
+
+    /* Волны-энергия из центра */
+    .wave {
+      position:absolute;
+      top:50%; left:50%;
+      width:20px; height:20px;
+      border:2px solid #00ff66;
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      animation: wave 4s linear infinite;
+      opacity:0.5;
+    }
+    @keyframes wave {
+      from {width:20px; height:20px; opacity:.5;}
+      to   {width:400px; height:400px; opacity:0;}
+    }
+
+    /* Символы */
+    .symbol {
+      position:absolute;
+      color:#00ff66;
+      opacity:0.8;
+      text-shadow:0 0 15px #00ff66;
+      animation: explode 4s forwards;
+      font-size: clamp(0.8rem,3vw,2rem);
+    }
+    @keyframes explode {
+      0%{transform:translate(0,0) scale(.3);opacity:1;}
+      100%{transform:translate(var(--x),var(--y)) scale(1.2);opacity:0;}
+    }
+
+    /* Кометы */
+    .comet {
+      position:absolute;
+      width:2px; height:80px;
+      background:linear-gradient(to bottom, #00ff66, transparent);
+      opacity:0.7;
+      animation: cometFly 3s linear forwards;
+    }
+    @keyframes cometFly {
+      0%   {transform:translate(100vw,-20vh) rotate(45deg);}
+      100% {transform:translate(-20vw,120vh) rotate(45deg);}
+    }
+
+    /* Взрывы частиц */
+    .burst {
+      position:absolute;
+      width:5px; height:5px;
+      border-radius:50%;
+      background:#00ffaa;
+      opacity:0.9;
+      animation: burstFly 1s forwards;
+    }
+    @keyframes burstFly {
+      0%{opacity:1;}
+      100%{transform:translate(var(--bx),var(--by)) scale(0);opacity:0;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wave"></div>
+  <div class="wave" style="animation-delay:2s;"></div>
+
+  <img id="dvd-logo" src="logo.png" alt="Логотип Игры ванецки">
+
+  <div class="center">
+    <h1>Игры Ванецки начинаются через:</h1>
+    <div id="timer">Загрузка...</div>
+  </div>
+
+  <script>
+    // Таймер
+    const endDate=new Date("2025-10-03T23:59:59").getTime();
+    const timerEl=document.getElementById("timer");
+    function updateTimer(){
+      const now=Date.now();
+      const dist=endDate-now;
+      if(dist<=0){timerEl.textContent="ВРЕМЯ НАСТУПИЛО!";return;}
+      const d=Math.floor(dist/86400000);
+      const h=Math.floor(dist/3600000)%24;
+      const m=Math.floor(dist/60000)%60;
+      const s=Math.floor(dist/1000)%60;
+      timerEl.textContent=`${d}д ${h}ч ${m}м ${s}с`;
+    }
+    setInterval(updateTimer,1000);updateTimer();
+
+    // Звёзды
+    for(let i=0;i<70;i++){
+      const star=document.createElement("div");
+      star.className="star";
+      const size=Math.random()*2+1;
+      star.style.width=size+"px"; star.style.height=size+"px";
+      star.style.top=Math.random()*100+"vh";
+      star.style.left=Math.random()*100+"vw";
+      star.style.animationDuration=(1+Math.random()*3)+"s";
+      document.body.appendChild(star);
+    }
+
+    // Глаза
+    for(let i=0;i<3;i++){
+      const eye=document.createElement("div");
+      eye.className="eye"; eye.textContent="👁";
+      eye.style.top=Math.random()*80+"vh";
+      eye.style.left=Math.random()*80+"vw";
+      eye.style.animationDelay=Math.random()*20+"s";
+      document.body.appendChild(eye);
+    }
+
+    // Символы
+    const symArr=["?","★","☯","♆","∞","☢","✦","✶"];
+    function createSymbol(){
+      const s=document.createElement("div");
+      s.className="symbol";
+      s.textContent=symArr[Math.floor(Math.random()*symArr.length)];
+      const angle=Math.random()*2*Math.PI;
+      const dist=200+Math.random()*200;
+      const x=Math.cos(angle)*dist+"px";
+      const y=Math.sin(angle)*dist+"px";
+      s.style.setProperty("--x",x);
+      s.style.setProperty("--y",y);
+      s.style.left="50%"; s.style.top="50%";
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),4000);
+    }
+    setInterval(createSymbol,250);
+
+    // DVD-логотип
+    const logo=document.getElementById("dvd-logo");
+    let x=100,y=100,dx=2,dy=2;
+    function moveLogo(){
+      const maxW=window.innerWidth-logo.offsetWidth;
+      const maxH=window.innerHeight-logo.offsetHeight;
+      x+=dx; y+=dy;
+      if(x<=0||x>=maxW){dx=-dx;randomColor();makeTrail();makeBurst(x,y);}
+      if(y<=0||y>=maxH){dy=-dy;randomColor();makeTrail();makeBurst(x,y);}
+      logo.style.transform=`translate(${x}px,${y}px)`;
+      requestAnimationFrame(moveLogo);
+    }
+    function randomColor(){
+      const colors=["#00ff66","#00ffaa","#33ffcc","#99ff99","#00ffff"];
+      logo.style.filter=`drop-shadow(0 0 20px ${colors[Math.floor(Math.random()*colors.length)]})`;
+    }
+    function makeTrail(){
+      const t=document.createElement("div");
+      t.className="trail";
+      t.style.left=(x+logo.offsetWidth/2)+"px";
+      t.style.top=(y+logo.offsetHeight/2)+"px";
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(),600);
+    }
+    function makeBurst(bx,by){
+      for(let i=0;i<6;i++){
+        const b=document.createElement("div");
+        b.className="burst";
+        b.style.left=bx+"px"; b.style.top=by+"px";
+        b.style.setProperty("--bx",(Math.random()*200-100)+"px");
+        b.style.setProperty("--by",(Math.random()*200-100)+"px");
+        document.body.appendChild(b);
+        setTimeout(()=>b.remove(),1000);
+      }
+    }
+    moveLogo();
+
+    // Кометы
+    function createComet(){
+      const c=document.createElement("div");
+      c.className="comet";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),3000);
+    }
+    setInterval(createComet,2000);
+  </script>
+</body>
+</html>
